@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#16302a">
+  <title>UNIT. Модульные дома в Калининграде</title>
+  <meta name="description" content="Модульные дома, которые производят в Калининграде, привозят на участок и собирают в готовое жильё.">
+  <script>
+    // после перезагрузки страница всегда открывается с первого экрана
+    history.scrollRestoration = 'manual';
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    scrollTo(0, 0);
+  </script>
+  <link rel="modulepreload" href="vendor/three.module.min.js">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="#hero" aria-label="UNIT, на главную">UNIT</a>
+  <nav class="top__nav" id="nav" aria-label="Разделы">
+    <a href="#how">Как это работает</a>
+    <a href="#build">Конструктор</a>
+    <a href="#factory">Производство</a>
+    <a href="#built">Проекты</a>
+    <a href="#mortgage">Ипотека</a>
+    <a class="top__nav-extra" href="#contacts">Контакты</a>
+    <a class="top__nav-extra" href="tel:+79138485229">+7 913 848-52-29</a>
+  </nav>
+  <a class="top__phone" href="tel:+79138485229">+7 913 848-52-29</a>
+  <a class="btn btn--dark top__cta" href="#build">Собрать дом</a>
+  <button type="button" class="top__menu" aria-expanded="false" aria-controls="nav" aria-label="Меню"><span></span></button>
+</header>
+
+<main>
+
+<!-- ГЛАВНЫЙ ЭКРАН -->
+<div class="stage" aria-hidden="true">
+  <canvas id="scene"></canvas>
+  <div class="stage__labels" id="labels"></div>
+</div>
+
+<section class="hero" id="hero">
+  <div class="hero__text">
+    <h1>Одна система.<br>Ваш дом.</h1>
+    <p>Модульные дома, которые производят в&nbsp;Калининграде, привозят на&nbsp;участок и&nbsp;собирают в&nbsp;готовое жильё.</p>
+    <div class="hero__actions">
+      <a class="btn btn--amber" href="#build">Собрать свой дом</a>
+      <a class="link" href="#how">Как это работает</a>
+    </div>
+  </div>
+
+  <div class="hero__config">
+    <span class="hero__config-label" id="heroCountLabel">Сколько модулей в доме</span>
+    <div class="seg seg--light" role="group" aria-labelledby="heroCountLabel" data-count>
+      <button type="button" data-n="1">1</button>
+      <button type="button" data-n="2">2</button>
+      <button type="button" data-n="3">3</button>
+      <button type="button" data-n="4">4</button>
+    </div>
+    <p class="hero__spec" aria-live="polite"><b data-out="area">72</b> м², <span data-out="rooms">2 спальни</span></p>
+  </div>
+</section>
+
+<!-- ДОМ РАЗБИРАЕТСЯ ПО СКРОЛЛУ, ДЕНЬ ПЕРЕХОДИТ В ВЕЧЕР -->
+<section class="split" id="split">
+  <div class="split__sticky">
+    <h2 class="split__title">Каждый дом начинается с&nbsp;модуля</h2>
+    <p class="split__note">Модули делают в&nbsp;цехе, привозят на&nbsp;участок и&nbsp;соединяют в&nbsp;один дом. Стройки на&nbsp;участке почти нет.</p>
+  </div>
+</section>
+
+<!-- КАК ЭТО РАБОТАЕТ -->
+<section class="sec" id="how">
+  <div class="sec__head">
+    <h2>От модуля до дома за шесть шагов</h2>
+    <p>Основная работа идёт на производстве, а не у вас на участке.</p>
+  </div>
+  <ol class="steps">
+    <li><span class="steps__n">01</span><h3>Выбираете</h3><p>Собираете конфигурацию: площадь, число модулей, комплектацию.</p></li>
+    <li><span class="steps__n">02</span><h3>Проектируем</h3><p>Адаптируем проект под ваш участок и задачи.</p></li>
+    <li><span class="steps__n">03</span><h3>Производим</h3><p>Делаем модули в цехе в Калининграде.</p></li>
+    <li><span class="steps__n">04</span><h3>Доставляем</h3><p>Привозим готовые модули на участок.</p></li>
+    <li><span class="steps__n">05</span><h3>Соединяем</h3><p>Собираем модули в единый дом и подключаем инженерию.</p></li>
+    <li><span class="steps__n">06</span><h3>Вы живёте</h3><p>Получаете готовое пространство, а не стройку.</p></li>
+  </ol>
+</section>
+
+<!-- КОНСТРУКТОР -->
+<section class="sec sec--mist" id="build">
+  <div class="sec__head">
+    <h2>Соберите свой дом</h2>
+    <p>Меняйте параметры и смотрите, как меняется дом и его стоимость.</p>
+  </div>
+  <div class="build">
+    <form class="build__controls" id="buildForm">
+      <fieldset>
+        <legend>Модули</legend>
+        <div class="seg" data-count>
+          <button type="button" data-n="1">1</button>
+          <button type="button" data-n="2">2</button>
+          <button type="button" data-n="3">3</button>
+          <button type="button" data-n="4">4</button>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Комплектация</legend>
+        <div class="seg" data-kit>
+          <button type="button" data-kit-id="base">Base</button>
+          <button type="button" data-kit-id="comfort">Comfort</button>
+          <button type="button" data-kit-id="premium">Premium</button>
+        </div>
+        <p class="hint" data-out="kitNote"></p>
+      </fieldset>
+      <fieldset>
+        <legend>Терраса</legend>
+        <div class="seg" data-terrace>
+          <button type="button" data-t="0">Без террасы</button>
+          <button type="button" data-t="1">С террасой</button>
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="build__stage">
+      <canvas id="buildScene" role="img" aria-label="3D-модель выбранной конфигурации"></canvas>
+    </div>
+
+    <div class="build__sum" aria-live="polite">
+      <dl>
+        <div><dt>Площадь</dt><dd><span data-out="area">72</span> м²</dd></div>
+        <div><dt>Спальни</dt><dd data-out="bedrooms">2</dd></div>
+        <div><dt>Модули</dt><dd data-out="n">3</dd></div>
+      </dl>
+      <div class="build__price">
+        <span>Примерная стоимость</span>
+        <strong>от <span data-out="price">0</span> ₽</strong>
+        <small>Предварительный расчёт. Точную цену назовём после разговора об участке.</small>
+      </div>
+      <a class="btn btn--dark" href="#start" id="toForm">Получить точный расчёт</a>
+    </div>
+  </div>
+</section>
+
+<!-- ИЗ ЧЕГО СОСТОИТ -->
+<section class="sec" id="layers">
+  <div class="sec__head">
+    <h2>Модульный не значит временный</h2>
+    <p>Стена модуля в разрезе. Выберите слой, чтобы узнать, зачем он нужен.</p>
+  </div>
+  <div class="layers">
+    <div class="layers__wall" id="wall" aria-hidden="true">
+      <span data-l="0"></span><span data-l="1"></span><span data-l="2"></span><span data-l="3"></span><span data-l="4"></span>
+    </div>
+    <div class="layers__list" role="tablist" aria-label="Слои стены">
+      <button role="tab" data-l="0">Фасад</button>
+      <button role="tab" data-l="1">Утепление</button>
+      <button role="tab" data-l="2">Каркас</button>
+      <button role="tab" data-l="3">Инженерия</button>
+      <button role="tab" data-l="4">Отделка</button>
+    </div>
+    <div class="layers__text" id="layerText" role="tabpanel" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- МИФЫ -->
+<section class="sec sec--narrow" id="myths">
+  <div class="sec__head">
+    <h2>Что обычно спрашивают о модульных домах</h2>
+  </div>
+  <div class="faq">
+    <div class="faq__item is-open">
+      <h3><button type="button" aria-expanded="true" aria-controls="faq1">Это бытовка?</button></h3>
+      <div class="faq__body" id="faq1"><div><p>Нет. Модульность описывает способ производства дома, а не его качество. Конструкция, утепление и инженерия рассчитаны на полноценный дом.</p></div></div>
+    </div>
+    <div class="faq__item">
+      <h3><button type="button" aria-expanded="false" aria-controls="faq2">Это только для дачи?</button></h3>
+      <div class="faq__body" id="faq2"><div><p>Нет. Конфигурацию и комплектацию подбираем под сценарий: постоянная жизнь, сезонный отдых или сдача в аренду.</p></div></div>
+    </div>
+    <div class="faq__item">
+      <h3><button type="button" aria-expanded="false" aria-controls="faq3">Модульный дом всегда маленький?</button></h3>
+      <div class="faq__body" id="faq3"><div><p>Нет. Один модуль даёт компактный дом, четыре и больше складываются в семейный дом с несколькими спальнями.</p></div></div>
+    </div>
+    <div class="faq__item">
+      <h3><button type="button" aria-expanded="false" aria-controls="faq4">Можно ли сделать индивидуальную планировку?</button></h3>
+      <div class="faq__body" id="faq4"><div><p>Да. Модули соединяются по-разному, а планировку внутри адаптируем под вашу семью.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРОИЗВОДСТВО -->
+<section class="sec sec--pine" id="factory">
+  <div class="factory">
+    <div class="video" data-youtube="FKsFYTPdbkY">
+      <button type="button" class="video__open">
+        <img src="https://i.ytimg.com/vi/FKsFYTPdbkY/maxresdefault.jpg" alt="" loading="lazy" decoding="async">
+        <span class="video__label">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>
+          Смотреть видео
+        </span>
+      </button>
+    </div>
+    <div class="factory__text">
+      <h2>Мы строим дом до того, как вы его увидите</h2>
+      <p>Каждый модуль создаётся в нашем цехе в Калининграде. На участок он приезжает с утеплением, инженерией и отделкой.</p>
+      <a class="btn btn--amber" href="#mortgage">Посчитать стоимость дома</a>
+    </div>
+  </div>
+  <dl class="stats">
+    <div><dd>07</dd><dt>лет работы</dt></div>
+    <div><dd>240+</dd><dt>модулей произведено</dt></div>
+    <div><dd>18 000</dd><dt>м² готовых домов</dt></div>
+    <div><dd>42</dd><dt>проекта сдано</dt></div>
+  </dl>
+</section>
+
+<!-- ПРОЕКТЫ -->
+<section class="sec" id="built">
+  <div class="sec__head">
+    <h2>Дома, которые уже стоят</h2>
+    <p>У каждого дома есть номер и своя страница с планировкой и комплектацией.</p>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <img class="card__photo" src="assets/house-1.jpg" alt="Дом с односкатной кровлей: чёрный фасад и светлая планка, терраса у входа" loading="lazy" decoding="async" style="object-position: 50% 60%">
+      <h3>Unit 014</h3>
+      <p>72 м², 3 модуля, 2 спальни</p>
+      <p class="card__place">Зеленоградский район</p>
+    </article>
+    <article class="card">
+      <img class="card__photo" src="assets/house-2.jpg" alt="Дом с двускатной кровлей и панорамным остеклением в сумерках" loading="lazy" decoding="async" style="object-position: 50% 62%">
+      <h3>Unit 021</h3>
+      <p>48 м², 2 модуля, 1 спальня</p>
+      <p class="card__place">Светлогорск</p>
+    </article>
+    <article class="card">
+      <img class="card__photo" src="assets/house-3.jpg" alt="Вход в дом: тёмный фасад, деревянная дверь и терраса" loading="lazy" decoding="async" style="object-position: 50% 50%">
+      <h3>Unit 024</h3>
+      <p>96 м², 4 модуля, 3 спальни</p>
+      <p class="card__place">Гурьевский район</p>
+    </article>
+  </div>
+</section>
+
+<!-- ИПОТЕКА -->
+<section class="sec sec--mist" id="mortgage">
+  <div class="sec__head">
+    <h2>Дом в ипотеку</h2>
+    <p>Прикиньте платёж. С программами банков и документами поможем.</p>
+  </div>
+  <form class="calc" id="calc">
+    <label>Стоимость дома
+      <output data-for="cost"></output>
+      <input type="range" name="cost" min="1500000" max="12000000" step="100000" value="4500000">
+    </label>
+    <label>Первоначальный взнос
+      <output data-for="down"></output>
+      <input type="range" name="down" min="0" max="6000000" step="50000" value="900000">
+    </label>
+    <label>Срок
+      <output data-for="years"></output>
+      <input type="range" name="years" min="1" max="30" step="1" value="25">
+    </label>
+    <label>Ставка
+      <output data-for="rate"></output>
+      <input type="range" name="rate" min="1" max="30" step="0.5" value="16">
+    </label>
+    <div class="calc__result" aria-live="polite">
+      <span>Платёж в месяц</span>
+      <strong id="pay">0 ₽</strong>
+      <small>Расчёт ориентировочный. Ставку уточняйте в банке.</small>
+    </div>
+  </form>
+</section>
+
+<!-- OPEN UNIT И АКЦИИ -->
+<section class="sec" id="open">
+  <div class="open">
+    <div class="open__main">
+      <h2>Open Unit: день открытых дверей на производстве</h2>
+      <p>Раз в месяц открываем цех. Можно потрогать стены, посмотреть инженерию, зайти в готовый модуль и задать вопросы конструктору.</p>
+      <a class="btn btn--dark" href="#contacts">Связаться с нами</a>
+    </div>
+    <ul class="offers">
+      <li><h3>Первый Unit</h3><p>При заказе дома адаптация проекта под участок в подарок.</p></li>
+      <li><h3>Соседи</h3><p>Два дома рядом: оба заказчика получают скидку на доставку и монтаж.</p></li>
+      <li><h3>Unit for two</h3><p>Привели друга, который заключил договор: бонус на комплектацию вам обоим.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ЗАЯВКА -->
+<section class="sec sec--pine final" id="start">
+  <h2>Участок пустует.<br>Давайте это исправим.</h2>
+  <div class="lead">
+    <p class="lead__conf" data-out="summary"></p>
+    <p>Нажмите кнопку: откроется наш чат в Telegram, и в сообщении уже будет ваша конфигурация. Останется его отправить.</p>
+    <a class="btn btn--amber" id="leadLink" href="https://t.me/kiwnt1" target="_blank" rel="noopener">Отправить в Telegram</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" id="contacts">
+  <p class="foot__line">Модульные дома из&nbsp;Калининграда</p>
+  <div class="foot__bottom">
+    <span class="logo">UNIT</span>
+    <ul class="foot__contacts">
+      <li><span>Телефон</span><a href="tel:+79138485229">+7 913 848-52-29</a></li>
+      <li><span>Telegram</span><a href="https://t.me/kiwnt1" target="_blank" rel="noopener">@kiwnt1</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+<script type="module" src="script.js"></script>
+</body>
+</html>
