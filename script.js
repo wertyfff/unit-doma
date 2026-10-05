@@ -32,6 +32,7 @@ const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, t) => a + (b - a) * t;
 const smooth = (a, b, x) => { x = clamp((x - a) / (b - a)); return x * x * (3 - 2 * x); };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const phone = matchMedia('(max-width: 820px)').matches; // правки только для телефонов
 const breathe = () => new Promise((r) => setTimeout(r, 0)); // отдаём поток браузеру между тяжёлыми шагами
 
 // =====================================================================
@@ -378,7 +379,8 @@ async function createView(canvas, { hero = false, labelsEl = null, types, kit })
   renderer.shadowMap.autoUpdate = false; // тени пересчитываем, только когда что-то сдвинулось
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 30000);
+  // на телефоне диапазон глубины уже: мобильным видеочипам так проще не путать ближнее с дальним
+  const camera = new THREE.PerspectiveCamera(30, 1, phone ? 2 : 0.5, phone ? 4000 : 30000);
   const narrowStart = hero && canvas.clientWidth < canvas.clientHeight;
 
   // --- небо и свет
@@ -386,8 +388,8 @@ async function createView(canvas, { hero = false, labelsEl = null, types, kit })
     top: { value: new THREE.Color() }, mid: { value: new THREE.Color() }, bot: { value: new THREE.Color() },
     sunDir: { value: new THREE.Vector3(0, 1, 0) }, sunCol: { value: new THREE.Color() }, glow: { value: 0.2 },
   };
-  const sky = new THREE.Mesh(new THREE.SphereGeometry(9000, 32, 16), new THREE.ShaderMaterial({
-    side: THREE.BackSide, depthWrite: false, uniforms: U,
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(phone ? 3000 : 9000, 32, 16), new THREE.ShaderMaterial({
+    side: THREE.BackSide, depthWrite: false, depthTest: !phone, uniforms: U,
     vertexShader: 'varying vec3 vDir; void main() { vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
     fragmentShader: `
       uniform vec3 top, mid, bot, sunDir, sunCol; uniform float glow; varying vec3 vDir;
@@ -403,7 +405,9 @@ async function createView(canvas, { hero = false, labelsEl = null, types, kit })
         #include <colorspace_fragment>
       }`,
   }));
-  sky.renderOrder = 3; // небо рисуем последним: закрытые домом и землёй пиксели не считаются
+  // На компьютере небо рисуем последним: закрытые домом и землёй пиксели не считаются.
+  // На телефоне — первым и без проверки глубины, чтобы оно никогда не могло перекрыть сцену.
+  sky.renderOrder = phone ? -10 : 3;
   scene.add(sky);
   const SKY = {
     day: { top: new THREE.Color(0x1466e0), mid: new THREE.Color(0x58b0ff), bot: new THREE.Color(0xd6efff), sun: new THREE.Color(0xfff3d6) },
@@ -680,7 +684,7 @@ async function createView(canvas, { hero = false, labelsEl = null, types, kit })
     }
     if (word) { // ставим надпись за гребнем холма, лицом к камере первого экрана
       const dir = new THREE.Vector3().subVectors(poseA.tgt, poseA.pos).setY(0).normalize();
-      word.scale.setScalar(narrow ? 0.62 : Math.min(1, aspect / 1.7));
+      word.scale.setScalar(narrow ? 0.4 : Math.min(1, aspect / 1.7));
       word.position.copy(poseA.pos).addScaledVector(dir, 118).setY(narrow ? 6.5 : 5.6);
       word.lookAt(poseA.pos.x, word.position.y, poseA.pos.z);
     }
@@ -894,6 +898,7 @@ let scrollEnd = 1, solid = false;
 function onScroll() {
   heroView?.setScroll(clamp(scrollY / scrollEnd));
   heroView?.run(scrollY < scrollEnd + innerHeight); // дальше сцена закрыта секциями
+  if (phone) split.style.setProperty('--in', smooth(split.offsetTop - innerHeight * 0.1, split.offsetTop + innerHeight * 0.15, scrollY).toFixed(3)); // заголовок проявляется, когда первый экран уехал
   const next = scrollY > scrollEnd + innerHeight - 72; // над светлыми секциями шапке нужна подложка
   if (next !== solid) topBar.classList.toggle('is-solid', solid = next);
 }

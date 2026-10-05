@@ -296,6 +296,7 @@ legend { margin-bottom: 10px; font-weight: 500; }
   .top__cta { margin-left: auto; }
   .video__label { min-height: 48px; font-size: 16px; }
   .hero { min-height: max(100svh, 700px); }
+  .split__title, .split__note { opacity: var(--in, 1); }
   .hero__text { right: var(--pad); bottom: 164px; }
   .hero__text h1 { font-size: 40px; }
   .hero__text p { font-size: 16px; margin-top: 14px; }
